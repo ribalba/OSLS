@@ -8,6 +8,7 @@ It combines:
 - editable session metadata
 - label preview and printing (Brother QL)
 - print analytics and log export
+- Works on Linux and macOS
 
 ## Screenshot
 

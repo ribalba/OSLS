@@ -34,7 +34,7 @@
     {
       "key": "logo_path",
       "print_name": "Logo",
-      "show": false,
+      "show": true,
       "font_size": 24
     },
     {

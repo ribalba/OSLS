@@ -10,7 +10,6 @@ Features:
 """
 
 import json
-import os
 import re
 import subprocess
 import sys
@@ -36,6 +35,7 @@ DEFAULT_WIDGET_SCALING = 1.35
 ctk.set_widget_scaling(DEFAULT_WIDGET_SCALING)
 
 PRINTER_MODEL = "QL-810W"
+PROJECT_ROOT = Path(__file__).resolve().parent
 CONFIG_DIR = Path(__file__).with_name("config")
 CONFIG_DIR.mkdir(parents=True, exist_ok=True)
 CONFIG_PATH = CONFIG_DIR / "printer_config.json"
@@ -351,6 +351,17 @@ FONT_MAIN = load_font(34)
 FONT_SMALL = load_font(24)
 
 
+def resolve_logo_path(raw_path):
+    logo_path = str(raw_path).strip()
+    if not logo_path:
+        return None
+
+    candidate = Path(logo_path).expanduser()
+    if not candidate.is_absolute():
+        candidate = PROJECT_ROOT / candidate
+    return candidate
+
+
 def build_label_image(label_values, label_field_config, line_spacing):
     img = Image.new("RGB", (LABEL_WIDTH, LABEL_HEIGHT), "white")
     draw = ImageDraw.Draw(img)
@@ -367,8 +378,8 @@ def build_label_image(label_values, label_field_config, line_spacing):
 
     logo_entry = config_by_key.get("logo_path", {})
     show_logo = bool(logo_entry.get("show", False))
-    logo_path = str(label_values.get("logo_path", "")).strip()
-    if show_logo and logo_path and os.path.exists(logo_path):
+    logo_path = resolve_logo_path(label_values.get("logo_path", ""))
+    if show_logo and logo_path and logo_path.exists():
         try:
             logo = Image.open(logo_path).convert("RGBA")
             logo.thumbnail((logo_box_w, logo_box_h), RESAMPLE_LANCZOS)
