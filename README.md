@@ -62,9 +62,19 @@ The goal is simple: give small operators control over labeling infrastructure wi
 - reset button archives old log to `logs/` and starts fresh
 - Printed label images saved under `printed_labels/`
 
+## Hardware
+
+Developed using:
+
+Printer: https://www.amazon.de/Brother-QL810WCZG1-QL810WC-Labeldrucker/
+
+Scale: https://www.amazon.de/-/en/KERN-FCD-10K-3-Readability-Integrated/
+
+I chose the printer because it can do WiFi and the Scale because it has a serial port.
+
 ## Requirements
 
-- Python 3.11+ (tested on Fedora Linux)
+- Python 3.11+ (tested on Fedora Linux + macOS)
 - Brother QL printer supported by `brother_ql`
 - USB scale providing serial weight lines containing `kg`
 
