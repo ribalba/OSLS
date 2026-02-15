@@ -1,0 +1,7 @@
+{
+  "connection_mode": "usb",
+  "usb": {
+    "backend": "pyusb",
+    "identifier": "usb://0x04f9:0x209c"
+  }
+}

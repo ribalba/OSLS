@@ -1,0 +1,101 @@
+{
+  "line_spacing": 12,
+  "fields": [
+    {
+      "key": "weight_kg",
+      "print_name": "Nettogewicht",
+      "show": true,
+      "font_size": 34
+    },
+    {
+      "key": "price_per_kg",
+      "print_name": "Preis/kg",
+      "show": true,
+      "font_size": 24
+    },
+    {
+      "key": "cut_name",
+      "print_name": "",
+      "show": true,
+      "font_size": 60
+    },
+    {
+      "key": "total_price",
+      "print_name": "Preis",
+      "show": true,
+      "font_size": 34
+    },
+    {
+      "key": "farm_name",
+      "print_name": "Hersteller",
+      "show": true,
+      "font_size": 28
+    },
+    {
+      "key": "logo_path",
+      "print_name": "Logo",
+      "show": false,
+      "font_size": 24
+    },
+    {
+      "key": "animal_number",
+      "print_name": "Ident. Nr.",
+      "show": true,
+      "font_size": 24
+    },
+    {
+      "key": "farm_number",
+      "print_name": "Hersteller Nr.",
+      "show": true,
+      "font_size": 24
+    },
+    {
+      "key": "__empty_line__1771182521364861402",
+      "print_name": "",
+      "show": true,
+      "font_size": 24
+    },
+    {
+      "key": "due_date_4_7",
+      "print_name": "Bei 4 C bis 7 C gekuehlt haltbar bis:",
+      "show": true,
+      "font_size": 24
+    },
+    {
+      "key": "due_date_frozen",
+      "print_name": "Bei -18 C gefroren verbrauchen bis:",
+      "show": true,
+      "font_size": 24
+    },
+    {
+      "key": "birth_country",
+      "print_name": "Geboren",
+      "show": true,
+      "font_size": 24
+    },
+    {
+      "key": "life_country",
+      "print_name": "Aufgewachsen",
+      "show": true,
+      "font_size": 24
+    },
+    {
+      "key": "slaughter_country",
+      "print_name": "Geschlachtet",
+      "show": true,
+      "font_size": 24
+    },
+    {
+      "key": "packaged_country",
+      "print_name": "Zerlegt",
+      "show": true,
+      "font_size": 24
+    },
+    {
+      "key": "tax",
+      "print_name": "Tax",
+      "show": true,
+      "font_size": 24
+    }
+  ]
+}

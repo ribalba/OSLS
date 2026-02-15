@@ -1,0 +1,5 @@
+customtkinter
+Pillow
+qrcode
+pyserial
+brother_ql
