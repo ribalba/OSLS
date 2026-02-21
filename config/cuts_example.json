@@ -1,0 +1,52 @@
+[
+  {
+    "cut_name": "Ribeye Steak",
+    "price_per_kg": "36.90",
+    "tax": ""
+  },
+  {
+    "cut_name": "Sirloin Steak",
+    "price_per_kg": "31.50",
+    "tax": ""
+  },
+  {
+    "cut_name": "Tenderloin",
+    "price_per_kg": "49.00",
+    "tax": ""
+  },
+  {
+    "cut_name": "Rump Steak",
+    "price_per_kg": "26.80",
+    "tax": ""
+  },
+  {
+    "cut_name": "Brisket",
+    "price_per_kg": "18.40",
+    "tax": ""
+  },
+  {
+    "cut_name": "Chuck Roast",
+    "price_per_kg": "16.20",
+    "tax": ""
+  },
+  {
+    "cut_name": "Beef Mince",
+    "price_per_kg": "14.90",
+    "tax": ""
+  },
+  {
+    "cut_name": "Short Ribs",
+    "price_per_kg": "22.70",
+    "tax": ""
+  },
+  {
+    "cut_name": "Oxtail",
+    "price_per_kg": "19.60",
+    "tax": ""
+  },
+  {
+    "cut_name": "Soup Bones",
+    "price_per_kg": "7.90",
+    "tax": ""
+  }
+]

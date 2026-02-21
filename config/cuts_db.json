@@ -1,52 +1,182 @@
 [
   {
-    "cut_name": "Ribeye Steak",
-    "price_per_kg": "36.90",
+    "cut_name": "Filet",
+    "price_per_kg": "70.00",
     "tax": ""
   },
   {
-    "cut_name": "Sirloin Steak",
-    "price_per_kg": "31.50",
+    "cut_name": "Roastbeef",
+    "price_per_kg": "47.00",
     "tax": ""
   },
   {
-    "cut_name": "Tenderloin",
-    "price_per_kg": "49.00",
+    "cut_name": "Entrecote",
+    "price_per_kg": "47.00",
     "tax": ""
   },
   {
-    "cut_name": "Rump Steak",
-    "price_per_kg": "26.80",
+    "cut_name": "Flank-Steak",
+    "price_per_kg": "30.00",
     "tax": ""
   },
   {
-    "cut_name": "Brisket",
-    "price_per_kg": "18.40",
+    "cut_name": "Hüftbraten",
+    "price_per_kg": "42.00",
     "tax": ""
   },
   {
-    "cut_name": "Chuck Roast",
-    "price_per_kg": "16.20",
+    "cut_name": "Hüftsteak",
+    "price_per_kg": "46.00",
     "tax": ""
   },
   {
-    "cut_name": "Beef Mince",
-    "price_per_kg": "14.90",
+    "cut_name": "Bäckchen",
+    "price_per_kg": "25.00",
     "tax": ""
   },
   {
-    "cut_name": "Short Ribs",
-    "price_per_kg": "22.70",
+    "cut_name": "Kugelbraten",
+    "price_per_kg": "29.00",
     "tax": ""
   },
   {
-    "cut_name": "Oxtail",
-    "price_per_kg": "19.60",
+    "cut_name": "Tafelspitz",
+    "price_per_kg": "32.00",
     "tax": ""
   },
   {
-    "cut_name": "Soup Bones",
-    "price_per_kg": "7.90",
+    "cut_name": "Bürgermeister",
+    "price_per_kg": "28.00",
+    "tax": ""
+  },
+  {
+    "cut_name": "Falsches Filet",
+    "price_per_kg": "28.00",
+    "tax": ""
+  },
+  {
+    "cut_name": "Hamburger Rolle",
+    "price_per_kg": "26.00",
+    "tax": ""
+  },
+  {
+    "cut_name": "Schaufelbraten",
+    "price_per_kg": "25.00",
+    "tax": ""
+  },
+  {
+    "cut_name": "Roll-Braten",
+    "price_per_kg": "22.00",
+    "tax": ""
+  },
+  {
+    "cut_name": "Braten",
+    "price_per_kg": "26.00",
+    "tax": ""
+  },
+  {
+    "cut_name": "Gulasch",
+    "price_per_kg": "27.00",
+    "tax": ""
+  },
+  {
+    "cut_name": "Brust",
+    "price_per_kg": "22.00",
+    "tax": ""
+  },
+  {
+    "cut_name": "4 Rouladen",
+    "price_per_kg": "27.00",
+    "tax": ""
+  },
+  {
+    "cut_name": "Ochsenkotlett",
+    "price_per_kg": "28.00",
+    "tax": ""
+  },
+  {
+    "cut_name": "Rippe",
+    "price_per_kg": "20.00",
+    "tax": ""
+  },
+  {
+    "cut_name": "Hack",
+    "price_per_kg": "20.00",
+    "tax": ""
+  },
+  {
+    "cut_name": "Beinscheibe",
+    "price_per_kg": "17.00",
+    "tax": ""
+  },
+  {
+    "cut_name": "Kochfleisch",
+    "price_per_kg": "12.00",
+    "tax": ""
+  },
+  {
+    "cut_name": "Markknochen",
+    "price_per_kg": "12.00",
+    "tax": ""
+  },
+  {
+    "cut_name": "Fleischknochen",
+    "price_per_kg": "8.00",
+    "tax": ""
+  },
+  {
+    "cut_name": "Schwanz",
+    "price_per_kg": "16.00",
+    "tax": ""
+  },
+  {
+    "cut_name": "Leber",
+    "price_per_kg": "17.00",
+    "tax": ""
+  },
+  {
+    "cut_name": "Zunge",
+    "price_per_kg": "18.00",
+    "tax": ""
+  },
+  {
+    "cut_name": "Herz",
+    "price_per_kg": "12.00",
+    "tax": ""
+  },
+  {
+    "cut_name": "Nieren",
+    "price_per_kg": "9.00",
+    "tax": ""
+  },
+  {
+    "cut_name": "Onglet",
+    "price_per_kg": "36.00",
+    "tax": ""
+  },
+  {
+    "cut_name": "Wade",
+    "price_per_kg": "18.00",
+    "tax": ""
+  },
+  {
+    "cut_name": "Fleisch für Hunde",
+    "price_per_kg": "8.00",
+    "tax": ""
+  },
+  {
+    "cut_name": "Verarbeitungsfleisch",
+    "price_per_kg": "10.00",
+    "tax": ""
+  },
+  {
+    "cut_name": "Verarbeitungsfleisch für Salami",
+    "price_per_kg": "10.00",
+    "tax": ""
+  },
+  {
+    "cut_name": "Verarbeitungsfleisch für Schinken",
+    "price_per_kg": "10.00",
     "tax": ""
   }
 ]
