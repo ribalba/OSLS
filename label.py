@@ -10,6 +10,7 @@ Features:
 """
 
 import json
+import csv
 import re
 import subprocess
 import sys
@@ -1258,8 +1259,9 @@ class AnalyticsWindow(ctk.CTkToplevel):
         top = ctk.CTkFrame(main)
         top.grid(row=0, column=0, sticky="ew", pady=(0, 8))
         ctk.CTkButton(top, text="Refresh", command=self.refresh_data).grid(row=0, column=0, padx=(0, 6))
-        ctk.CTkButton(top, text="Reset", command=self.on_reset_log).grid(row=0, column=1, padx=(0, 6))
-        ctk.CTkButton(top, text="Close", command=self.destroy).grid(row=0, column=2)
+        ctk.CTkButton(top, text="Export CSV", command=self.on_export_csv).grid(row=0, column=1, padx=(0, 6))
+        ctk.CTkButton(top, text="Reset", command=self.on_reset_log).grid(row=0, column=2, padx=(0, 6))
+        ctk.CTkButton(top, text="Close", command=self.destroy).grid(row=0, column=3)
 
         self.tabview = ctk.CTkTabview(main)
         self.tabview.grid(row=1, column=0, sticky="nsew")
@@ -1402,6 +1404,31 @@ class AnalyticsWindow(ctk.CTkToplevel):
         self.total_count_var.set(str(len(entries)))
         self.total_weight_var.set(f"{total_weight:.4f}")
         self.total_price_var.set(f"{total_price:.2f}")
+
+    def on_export_csv(self):
+        file_path = filedialog.asksaveasfilename(
+            parent=self,
+            title="Export analytics by cut",
+            defaultextension=".csv",
+            filetypes=[("CSV", "*.csv"), ("All files", "*.*")],
+        )
+        if not file_path:
+            return
+
+        rows = [
+            self.summary_tree.item(iid)["values"]
+            for iid in self.summary_tree.get_children()
+        ]
+        try:
+            with open(file_path, "w", newline="", encoding="utf-8") as f:
+                writer = csv.writer(f)
+                writer.writerow(["Cut name", "Total KG", "Total Price"])
+                writer.writerows(rows)
+        except Exception as e:
+            messagebox.showerror("Export failed", f"Could not export CSV:\n{e}", parent=self)
+            return
+
+        messagebox.showinfo("Export done", f"Exported to:\n{file_path}", parent=self)
 
     def on_reset_log(self):
         if not messagebox.askyesno(
