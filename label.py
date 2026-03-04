@@ -34,6 +34,18 @@ ctk.set_default_color_theme("blue")
 DEFAULT_WIDGET_SCALING = 1.35
 ctk.set_widget_scaling(DEFAULT_WIDGET_SCALING)
 
+_TREE_ROW_HEIGHT = int(26 * DEFAULT_WIDGET_SCALING)
+_TREE_FONT = ("TkDefaultFont", int(11 * DEFAULT_WIDGET_SCALING))
+
+
+def _maximize(win):
+    """Open a window maximized, works on macOS/Linux/Windows."""
+    try:
+        win.state("zoomed")
+    except Exception:
+        win.update_idletasks()
+        win.geometry(f"{win.winfo_screenwidth()}x{win.winfo_screenheight()}+0+0")
+
 PRINTER_MODEL = "QL-810W"
 PROJECT_ROOT = Path(__file__).resolve().parent
 CONFIG_DIR = Path(__file__).with_name("config")
@@ -629,7 +641,7 @@ class DatabaseEditorWindow(ctk.CTkToplevel):
         super().__init__(app)
         self.app = app
         self.title("Edit DB")
-        self.geometry("680x420")
+        self.after(0, lambda: _maximize(self))
         self.controls_layout_job = None
         self.control_buttons = []
         self.last_controls_layout = None
@@ -919,7 +931,7 @@ class LabelConfigWindow(ctk.CTkToplevel):
         super().__init__(app)
         self.app = app
         self.title("Configure label")
-        self.geometry("1020x680")
+        self.after(0, lambda: _maximize(self))
 
         self.row_models = []
         self.row_widgets = []
@@ -1235,7 +1247,7 @@ class AnalyticsWindow(ctk.CTkToplevel):
         super().__init__(app)
         self.app = app
         self.title("Analytics")
-        self.geometry("980x600")
+        self.after(0, lambda: _maximize(self))
 
         main = ctk.CTkFrame(self)
         main.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
@@ -1257,6 +1269,17 @@ class AnalyticsWindow(ctk.CTkToplevel):
         self._build_totals_tab()
         self.refresh_data()
 
+    def _apply_tree_style(self, tree):
+        style = ttk.Style(tree)
+        style_name = f"Analytics.Treeview"
+        style.configure(
+            style_name,
+            rowheight=_TREE_ROW_HEIGHT,
+            font=_TREE_FONT,
+        )
+        style.configure(f"{style_name}.Heading", font=(_TREE_FONT[0], _TREE_FONT[1], "bold"))
+        tree.configure(style=style_name)
+
     def _build_summary_tab(self):
         self.tabview.add("By Cut")
         tab = self.tabview.tab("By Cut")
@@ -1268,12 +1291,13 @@ class AnalyticsWindow(ctk.CTkToplevel):
             columns=("cut_name", "total_kg", "total_price"),
             show="headings",
         )
+        self._apply_tree_style(self.summary_tree)
         self.summary_tree.heading("cut_name", text="Cut name")
         self.summary_tree.heading("total_kg", text="Total KG")
         self.summary_tree.heading("total_price", text="Total Price")
-        self.summary_tree.column("cut_name", width=320, anchor="w")
-        self.summary_tree.column("total_kg", width=150, anchor="e")
-        self.summary_tree.column("total_price", width=180, anchor="e")
+        self.summary_tree.column("cut_name", minwidth=160, width=320, stretch=True, anchor="w")
+        self.summary_tree.column("total_kg", minwidth=80, width=150, stretch=True, anchor="e")
+        self.summary_tree.column("total_price", minwidth=100, width=180, stretch=True, anchor="e")
         self.summary_tree.grid(row=0, column=0, sticky="nsew")
 
         sc = ttk.Scrollbar(tab, orient="vertical", command=self.summary_tree.yview)
@@ -1291,16 +1315,17 @@ class AnalyticsWindow(ctk.CTkToplevel):
             columns=("time", "cut_name", "weight_kg", "price_per_kg", "total_price"),
             show="headings",
         )
+        self._apply_tree_style(self.log_tree)
         self.log_tree.heading("time", text="Time")
         self.log_tree.heading("cut_name", text="Cut name")
         self.log_tree.heading("weight_kg", text="Weight KG")
         self.log_tree.heading("price_per_kg", text="Price/KG")
         self.log_tree.heading("total_price", text="Total Price")
-        self.log_tree.column("time", width=200, anchor="w")
-        self.log_tree.column("cut_name", width=260, anchor="w")
-        self.log_tree.column("weight_kg", width=120, anchor="e")
-        self.log_tree.column("price_per_kg", width=120, anchor="e")
-        self.log_tree.column("total_price", width=140, anchor="e")
+        self.log_tree.column("time", minwidth=120, width=200, stretch=True, anchor="w")
+        self.log_tree.column("cut_name", minwidth=120, width=260, stretch=True, anchor="w")
+        self.log_tree.column("weight_kg", minwidth=80, width=120, stretch=True, anchor="e")
+        self.log_tree.column("price_per_kg", minwidth=80, width=120, stretch=True, anchor="e")
+        self.log_tree.column("total_price", minwidth=80, width=140, stretch=True, anchor="e")
         self.log_tree.grid(row=0, column=0, sticky="nsew")
 
         sc = ttk.Scrollbar(tab, orient="vertical", command=self.log_tree.yview)
@@ -1412,8 +1437,8 @@ class LabelApp(ctk.CTk):
     def __init__(self):
         super().__init__()
         self.title("The Open Source Labeling Scale Project")
-        self.geometry("1200x780")
         self.minsize(900, 620)
+        self.after(0, lambda: _maximize(self))
 
         self.items = []
         self.current_label_image = None
