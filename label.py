@@ -18,7 +18,7 @@ import time
 from datetime import datetime
 from pathlib import Path
 import tkinter as tk
-from tkinter import filedialog, messagebox, ttk
+from tkinter import filedialog, font as tkfont, messagebox, ttk
 import customtkinter as ctk
 
 from PIL import Image, ImageDraw, ImageFont, ImageTk
@@ -34,8 +34,7 @@ ctk.set_default_color_theme("blue")
 DEFAULT_WIDGET_SCALING = 1.35
 ctk.set_widget_scaling(DEFAULT_WIDGET_SCALING)
 
-_TREE_ROW_HEIGHT = int(26 * DEFAULT_WIDGET_SCALING)
-_TREE_FONT = ("TkDefaultFont", int(11 * DEFAULT_WIDGET_SCALING))
+_TREE_PADDING = 10  # px of vertical padding added to font linespace for row height
 
 
 def _maximize(win):
@@ -1259,7 +1258,8 @@ class AnalyticsWindow(ctk.CTkToplevel):
         top = ctk.CTkFrame(main)
         top.grid(row=0, column=0, sticky="ew", pady=(0, 8))
         ctk.CTkButton(top, text="Refresh", command=self.refresh_data).grid(row=0, column=0, padx=(0, 6))
-        ctk.CTkButton(top, text="Reset", command=self.on_reset_log).grid(row=0, column=1)
+        ctk.CTkButton(top, text="Reset", command=self.on_reset_log).grid(row=0, column=1, padx=(0, 6))
+        ctk.CTkButton(top, text="Close", command=self.destroy).grid(row=0, column=2)
 
         self.tabview = ctk.CTkTabview(main)
         self.tabview.grid(row=1, column=0, sticky="nsew")
@@ -1270,15 +1270,14 @@ class AnalyticsWindow(ctk.CTkToplevel):
         self.refresh_data()
 
     def _apply_tree_style(self, tree):
+        try:
+            linespace = tkfont.nametofont("TkDefaultFont").metrics("linespace")
+        except Exception:
+            linespace = 18
+        rowheight = linespace + _TREE_PADDING
         style = ttk.Style(tree)
-        style_name = f"Analytics.Treeview"
-        style.configure(
-            style_name,
-            rowheight=_TREE_ROW_HEIGHT,
-            font=_TREE_FONT,
-        )
-        style.configure(f"{style_name}.Heading", font=(_TREE_FONT[0], _TREE_FONT[1], "bold"))
-        tree.configure(style=style_name)
+        style.configure("Analytics.Treeview", rowheight=rowheight)
+        tree.configure(style="Analytics.Treeview")
 
     def _build_summary_tab(self):
         self.tabview.add("By Cut")
