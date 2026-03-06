@@ -1269,6 +1269,7 @@ class AnalyticsWindow(ctk.CTkToplevel):
         self._build_summary_tab()
         self._build_logs_tab()
         self._build_totals_tab()
+        self._build_labels_per_article_tab()
         self.refresh_data()
 
     def _apply_tree_style(self, tree):
@@ -1333,6 +1334,28 @@ class AnalyticsWindow(ctk.CTkToplevel):
         sc.grid(row=0, column=1, sticky="ns")
         self.log_tree.configure(yscrollcommand=sc.set)
 
+    def _build_labels_per_article_tab(self):
+        self.tabview.add("Labels je Artikel")
+        tab = self.tabview.tab("Labels je Artikel")
+        tab.rowconfigure(0, weight=1)
+        tab.columnconfigure(0, weight=1)
+
+        self.labels_per_article_tree = ttk.Treeview(
+            tab,
+            columns=("article", "count"),
+            show="headings",
+        )
+        self._apply_tree_style(self.labels_per_article_tree)
+        self.labels_per_article_tree.heading("article", text="Artikel")
+        self.labels_per_article_tree.heading("count", text="Anzahl Labels")
+        self.labels_per_article_tree.column("article", minwidth=160, width=400, stretch=True, anchor="w")
+        self.labels_per_article_tree.column("count", minwidth=80, width=160, stretch=True, anchor="e")
+        self.labels_per_article_tree.grid(row=0, column=0, sticky="nsew")
+
+        sc = ttk.Scrollbar(tab, orient="vertical", command=self.labels_per_article_tree.yview)
+        sc.grid(row=0, column=1, sticky="ns")
+        self.labels_per_article_tree.configure(yscrollcommand=sc.set)
+
     def _build_totals_tab(self):
         self.tabview.add("Totals")
         tab = self.tabview.tab("Totals")
@@ -1356,8 +1379,11 @@ class AnalyticsWindow(ctk.CTkToplevel):
             self.summary_tree.delete(child)
         for child in self.log_tree.get_children():
             self.log_tree.delete(child)
+        for child in self.labels_per_article_tree.get_children():
+            self.labels_per_article_tree.delete(child)
 
         per_cut = {}
+        labels_per_article = {}
         total_weight = 0.0
         total_price = 0.0
 
@@ -1381,6 +1407,8 @@ class AnalyticsWindow(ctk.CTkToplevel):
             per_cut[cut_name]["kg"] += weight
             per_cut[cut_name]["price"] += price
 
+            labels_per_article[cut_name] = labels_per_article.get(cut_name, 0) + 1
+
             self.log_tree.insert(
                 "",
                 tk.END,
@@ -1399,6 +1427,11 @@ class AnalyticsWindow(ctk.CTkToplevel):
                 "",
                 tk.END,
                 values=(cut_name, f"{summary['kg']:.4f}", f"{summary['price']:.2f}"),
+            )
+
+        for article in sorted(labels_per_article):
+            self.labels_per_article_tree.insert(
+                "", tk.END, values=(article, labels_per_article[article])
             )
 
         self.total_count_var.set(str(len(entries)))
@@ -1495,6 +1528,7 @@ class LabelApp(ctk.CTk):
         self.last_scale_value = None
         self.same_value_iterations = 0
         self.last_auto_printed_value = None
+        self.must_zero_before_next_print = False
         self.auto_print_in_progress = False
         self.preview_update_job = None
         self.preview_resize_job = None
@@ -1845,6 +1879,7 @@ class LabelApp(ctk.CTk):
         self.last_scale_value = None
         self.same_value_iterations = 0
         self.last_auto_printed_value = None
+        self.must_zero_before_next_print = False
         self.current_weight_var.set("n/a")
 
     def get_required_stable_iterations(self):
@@ -1886,7 +1921,14 @@ class LabelApp(ctk.CTk):
             self.same_value_iterations = 1
             self.last_auto_printed_value = None
 
+        if abs(value) < MIN_PRINT_WEIGHT_KG:
+            self.must_zero_before_next_print = False
+
         if not self.auto_print_enabled_var.get():
+            return
+
+        if self.must_zero_before_next_print:
+            self.scale_status_var.set("Scale: return to zero before next print")
             return
 
         required = self.get_required_stable_iterations()
@@ -1896,6 +1938,7 @@ class LabelApp(ctk.CTk):
         ):
             if self._trigger_auto_print():
                 self.last_auto_printed_value = formatted
+                self.must_zero_before_next_print = True
 
     def update_total_price(self):
         weight = parse_decimal(self.current_weight_var.get())
