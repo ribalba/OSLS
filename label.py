@@ -88,6 +88,7 @@ SESSION_FIELDS = [
     ("life_country", "Life Country"),
     ("slaughter_country", "Slaugther Country"),
     ("packaged_country", "Packaged Country"),
+    ("identity_mark", "Identity Mark"),
 ]
 
 LABEL_FIELD_DEFS = [
@@ -106,6 +107,7 @@ LABEL_FIELD_DEFS = [
     ("life_country", "Life Country"),
     ("slaughter_country", "Slaugther Country"),
     ("packaged_country", "Packaged Country"),
+    ("identity_mark", "Identity Mark"),
 ]
 LABEL_FIELD_LABELS = {key: label for key, label in LABEL_FIELD_DEFS}
 EMPTY_LINE_KEY_PREFIX = "__empty_line__"
@@ -132,6 +134,9 @@ def default_label_field_config():
             entry["font_size"] = 34
         elif entry["key"] == "farm_name":
             entry["font_size"] = 28
+        elif entry["key"] == "identity_mark":
+            entry["font_size"] = 28
+            entry["show"] = False
 
     return defaults
 
@@ -374,6 +379,40 @@ def resolve_logo_path(raw_path):
     return candidate
 
 
+def _draw_identity_mark(draw, x, y, font_size, lines, spacing):
+    """Draw a German Identitätskennzeichen: an oval with up to 3 centred text lines.
+
+    Returns the total height used by the oval.
+    """
+    if not lines:
+        return 0
+
+    font = load_font(font_size)
+
+    max_text_w = 0
+    for line in lines:
+        bbox = font.getbbox(line)
+        max_text_w = max(max_text_w, bbox[2] - bbox[0])
+
+    oval_pad_h = max(16, font_size // 2)
+    oval_pad_v = max(12, font_size // 3)
+    inner_h = font_size * len(lines) + spacing * max(0, len(lines) - 1)
+    oval_w = max_text_w + oval_pad_h * 2
+    oval_h = inner_h + oval_pad_v * 2
+
+    draw.ellipse([x, y, x + oval_w, y + oval_h], outline="black", width=3)
+
+    text_y = y + oval_pad_v
+    for line in lines:
+        bbox = font.getbbox(line)
+        text_w = bbox[2] - bbox[0]
+        text_x = x + (oval_w - text_w) // 2
+        draw.text((text_x, text_y), line, fill="black", font=font)
+        text_y += font_size + spacing
+
+    return oval_h
+
+
 def build_label_image(label_values, label_field_config, line_spacing):
     img = Image.new("RGB", (LABEL_WIDTH, LABEL_HEIGHT), "white")
     draw = ImageDraw.Draw(img)
@@ -426,6 +465,13 @@ def build_label_image(label_values, label_field_config, line_spacing):
 
         value = str(label_values.get(key, "")).strip()
         if not value:
+            continue
+
+        if key == "identity_mark":
+            lines = value.split()[:3]
+            if lines:
+                oval_h = _draw_identity_mark(draw, margin, y, font_size, lines, spacing)
+                y += oval_h + spacing
             continue
 
         print_name = str(entry.get("print_name", LABEL_FIELD_LABELS.get(key, key))).strip()
@@ -1129,7 +1175,8 @@ class LabelConfigWindow(ctk.CTkToplevel):
     def delete_row(self, index):
         if index < 0 or index >= len(self.row_models):
             return
-        if not is_empty_line_key(self.row_models[index]["key"]):
+        key = self.row_models[index]["key"]
+        if not is_empty_line_key(key):
             return
         self._sync_models_from_widgets()
         del self.row_models[index]
