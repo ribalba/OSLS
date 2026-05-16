@@ -1,0 +1,9 @@
+__pycache__/
+*.py[cod]
+data/osls.sqlite3
+data/printed_labels/*
+!data/printed_labels/.gitkeep
+data/log_archives/*
+!data/log_archives/.gitkeep
+media/logos/*
+!media/logos/logo.png

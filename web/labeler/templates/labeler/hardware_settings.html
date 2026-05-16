@@ -1,0 +1,24 @@
+{% extends "labeler/base.html" %}
+
+{% block content %}
+<h1 class="ui header">Settings</h1>
+
+<form class="ui form" method="post">
+  {% csrf_token %}
+  <div class="field">
+    <label>Brother printer USB identifier</label>
+    <input name="printer_identifier" value="{{ settings_values.printer_identifier }}">
+  </div>
+  <div class="two fields">
+    <div class="field">
+      <label>Scale serial port</label>
+      <input name="scale_port" value="{{ settings_values.scale_port }}">
+    </div>
+    <div class="field">
+      <label>Scale baudrate</label>
+      <input name="scale_baudrate" type="number" value="{{ settings_values.scale_baudrate }}">
+    </div>
+  </div>
+  <button class="ui primary button" type="submit">Save Settings</button>
+</form>
+{% endblock %}

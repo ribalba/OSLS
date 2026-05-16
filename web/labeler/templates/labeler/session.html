@@ -1,0 +1,44 @@
+{% extends "labeler/base.html" %}
+
+{% block content %}
+<h1 class="ui header">Session</h1>
+
+<form class="ui form" method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <div class="two fields">
+    <div class="field">
+      <label>Name of Farm</label>
+      {{ form.farm_name }}
+    </div>
+    <div class="field">
+      <label>Logo path</label>
+      {{ form.logo_path }}
+    </div>
+  </div>
+  <div class="field">
+    <label>Upload logo</label>
+    <input name="logo_upload" type="file" accept="image/*">
+  </div>
+  <div class="two fields">
+    <div class="field"><label>Animal Number</label>{{ form.animal_number }}</div>
+    <div class="field"><label>Farm Number</label>{{ form.farm_number }}</div>
+  </div>
+  <div class="two fields">
+    <div class="field"><label>Due date 4-7</label>{{ form.due_date_4_7 }}</div>
+    <div class="field"><label>Due date frozen</label>{{ form.due_date_frozen }}</div>
+  </div>
+  <div class="two fields">
+    <div class="field"><label>Birth Country</label>{{ form.birth_country }}</div>
+    <div class="field"><label>Life Country</label>{{ form.life_country }}</div>
+  </div>
+  <div class="two fields">
+    <div class="field"><label>Slaugther Country</label>{{ form.slaughter_country }}</div>
+    <div class="field"><label>Packaged Country</label>{{ form.packaged_country }}</div>
+  </div>
+  <div class="field">
+    <label>Identity Mark</label>
+    {{ form.identity_mark }}
+  </div>
+  <button class="ui primary button" type="submit">Save Session</button>
+</form>
+{% endblock %}

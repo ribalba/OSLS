@@ -1,0 +1,62 @@
+{% extends "labeler/base.html" %}
+
+{% block content %}
+<h1 class="ui header">Analytics</h1>
+
+<form method="post" class="osls-toolbar">
+  {% csrf_token %}
+  <button class="ui button" name="action" value="export" type="submit">Export CSV</button>
+  <button class="ui negative button" name="action" value="reset" type="submit">Reset Active Log</button>
+</form>
+
+<div class="ui three statistics">
+  <div class="statistic">
+    <div class="value">{{ total_count }}</div>
+    <div class="label">Labels</div>
+  </div>
+  <div class="statistic">
+    <div class="value">{{ total_weight|floatformat:4 }}</div>
+    <div class="label">KG</div>
+  </div>
+  <div class="statistic">
+    <div class="value">{{ total_price|floatformat:2 }}</div>
+    <div class="label">Total Price</div>
+  </div>
+</div>
+
+<h2 class="ui header">By Cut</h2>
+<table class="ui celled table">
+  <thead><tr><th>Cut</th><th>Total KG</th><th>Total Price</th><th>Labels</th></tr></thead>
+  <tbody>
+    {% for row in by_cut %}
+      <tr>
+        <td>{{ row.cut_name|default:"(empty)" }}</td>
+        <td>{{ row.total_kg|floatformat:4 }}</td>
+        <td>{{ row.total_price|floatformat:2 }}</td>
+        <td>{{ row.count }}</td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="4">No active print logs.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<h2 class="ui header">Log</h2>
+<table class="ui celled table">
+  <thead><tr><th>Time</th><th>Cut</th><th>KG</th><th>Price / KG</th><th>Total Price</th><th>Trigger</th></tr></thead>
+  <tbody>
+    {% for log in logs %}
+      <tr>
+        <td>{{ log.printed_at|date:"Y-m-d H:i:s" }}</td>
+        <td>{{ log.cut_name }}</td>
+        <td>{{ log.weight_kg|floatformat:4 }}</td>
+        <td>{{ log.price_per_kg|floatformat:2 }}</td>
+        <td>{{ log.total_price|floatformat:2 }}</td>
+        <td>{{ log.trigger }}</td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="6">No active print logs.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

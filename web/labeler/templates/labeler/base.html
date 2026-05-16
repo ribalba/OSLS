@@ -1,0 +1,32 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OSLS Web</title>
+  <link rel="stylesheet" href="{% static 'vendor/fomantic-ui/semantic.min.css' %}">
+  <link rel="stylesheet" href="{% static 'labeler/app.css' %}">
+</head>
+<body>
+  <div class="ui top attached menu osls-menu">
+    <a class="item" href="{% url 'index' %}">Scale</a>
+    <a class="item" href="{% url 'cuts' %}">Cuts</a>
+    <a class="item" href="{% url 'session_settings' %}">Session</a>
+    <a class="item" href="{% url 'label_config' %}">Label</a>
+    <a class="item" href="{% url 'analytics' %}">Analytics</a>
+    <a class="item" href="{% url 'hardware_settings' %}">Settings</a>
+  </div>
+
+  <main class="ui container osls-page">
+    {% if messages %}
+      <div class="osls-messages">
+        {% for message in messages %}
+          <div class="ui {{ message.tags }} message">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

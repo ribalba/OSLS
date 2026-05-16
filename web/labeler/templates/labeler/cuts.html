@@ -1,0 +1,61 @@
+{% extends "labeler/base.html" %}
+
+{% block content %}
+<h1 class="ui header">Cuts</h1>
+
+<form class="ui form osls-inline-form" method="post">
+  {% csrf_token %}
+  <input type="hidden" name="action" value="add">
+  <div class="fields">
+    <div class="six wide field">
+      <label>Cut name</label>
+      <input name="cut_name">
+    </div>
+    <div class="three wide field">
+      <label>Price / KG</label>
+      <input name="price_per_kg" type="number" step="0.01">
+    </div>
+    <div class="three wide field">
+      <label>Tax</label>
+      <input name="tax">
+    </div>
+    <div class="four wide field osls-action-field">
+      <button class="ui primary button" type="submit">Add Cut</button>
+    </div>
+  </div>
+</form>
+
+<table class="ui celled table">
+  <thead>
+    <tr>
+      <th>Cut</th>
+      <th>Price / KG</th>
+      <th>Tax</th>
+      <th>Active</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for cut in cuts %}
+      <tr>
+        <td>
+          <form id="cut-form-{{ cut.id }}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="cut_id" value="{{ cut.id }}">
+            <input name="cut_name" value="{{ cut.cut_name }}">
+          </form>
+        </td>
+        <td><input form="cut-form-{{ cut.id }}" name="price_per_kg" type="number" step="0.01" value="{{ cut.price_per_kg }}"></td>
+        <td><input form="cut-form-{{ cut.id }}" name="tax" value="{{ cut.tax }}"></td>
+        <td><input form="cut-form-{{ cut.id }}" type="checkbox" name="active" {% if cut.active %}checked{% endif %}></td>
+        <td class="osls-actions">
+          <button form="cut-form-{{ cut.id }}" class="ui button" name="action" value="update" type="submit">Save</button>
+          <button form="cut-form-{{ cut.id }}" class="ui button" name="action" value="move_up" type="submit">Up</button>
+          <button form="cut-form-{{ cut.id }}" class="ui button" name="action" value="move_down" type="submit">Down</button>
+          <button form="cut-form-{{ cut.id }}" class="ui negative button" name="action" value="delete" type="submit">Delete</button>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

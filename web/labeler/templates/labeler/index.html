@@ -1,0 +1,85 @@
+{% extends "labeler/base.html" %}
+
+{% block content %}
+<div class="ui stackable two column grid">
+  <section class="ten wide column">
+    <h1 class="ui header">Scale</h1>
+    <div class="ui segment osls-status">
+      <div>
+        <div class="ui small header">Weight</div>
+        <div class="osls-weight">{{ current_weight }} kg</div>
+      </div>
+      <div>
+        <div class="ui small header">Scale status</div>
+        <p>{{ scale.status }}</p>
+        {% if workstation.status_message %}<p>{{ workstation.status_message }}</p>{% endif %}
+        {% if scale.last_error %}<p class="osls-muted">{{ scale.last_error }}</p>{% endif %}
+      </div>
+    </div>
+
+    <h2 class="ui header">Cuts</h2>
+    <div class="osls-cut-grid">
+      {% for cut in cuts %}
+        <form method="post">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="select_cut">
+          <input type="hidden" name="cut_id" value="{{ cut.id }}">
+          <button class="ui fluid button osls-cut-button" type="submit">
+            <strong>{{ cut.cut_name }}</strong>
+            <span>{{ cut.price_per_kg }} / KG</span>
+            {% if cut.tax %}<span>Tax {{ cut.tax }}</span>{% endif %}
+          </button>
+        </form>
+      {% empty %}
+        <p>No cuts yet. Add cuts in the cut editor.</p>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="six wide column">
+    <h2 class="ui header">Selected Label</h2>
+    <form class="ui form" method="post">
+      {% csrf_token %}
+      <div class="field">
+        <label>Cut name</label>
+        <input name="cut_name" value="{{ workstation.cut_name }}">
+      </div>
+      <div class="field">
+        <label>Price / KG</label>
+        <input name="price_per_kg" type="number" step="0.01" value="{{ workstation.price_per_kg|default_if_none:'' }}">
+      </div>
+      <div class="field">
+        <label>Tax</label>
+        <input name="tax" value="{{ workstation.tax }}">
+      </div>
+      <div class="two fields">
+        <div class="field">
+          <label>Current weight</label>
+          <input value="{{ current_weight }}" readonly>
+        </div>
+        <div class="field">
+          <label>Total price</label>
+          <input value="{{ total_price }}" readonly>
+        </div>
+      </div>
+      <div class="field">
+        <label>Stable iterations</label>
+        <input name="stable_iterations" type="number" min="1" max="1000" value="{{ workstation.stable_iterations }}">
+      </div>
+      <div class="two fields osls-checks">
+        <label><input type="checkbox" name="auto_print_enabled" {% if workstation.auto_print_enabled %}checked{% endif %}> Print when stable</label>
+        <label><input type="checkbox" name="cut_paper" {% if workstation.cut_paper %}checked{% endif %}> Cut paper</label>
+      </div>
+      <div class="ui buttons">
+        <button class="ui button" name="action" value="save" type="submit">Save</button>
+        <button class="ui primary button" name="action" value="print" type="submit">Print</button>
+      </div>
+    </form>
+
+    <h2 class="ui header">Preview</h2>
+    <div class="osls-preview">
+      <img src="{% url 'preview_png' %}?v={{ scale.updated_at|date:'U' }}" alt="Label preview">
+    </div>
+  </section>
+</div>
+{% endblock %}

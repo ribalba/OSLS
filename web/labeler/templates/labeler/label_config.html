@@ -1,0 +1,54 @@
+{% extends "labeler/base.html" %}
+
+{% block content %}
+<h1 class="ui header">Label</h1>
+
+<form class="ui form" method="post">
+  {% csrf_token %}
+  <div class="fields">
+    <div class="three wide field">
+      <label>Line spacing</label>
+      <input name="line_spacing" type="number" min="0" max="120" value="{{ line_spacing }}">
+    </div>
+    <div class="thirteen wide field osls-action-field">
+      <button class="ui primary button" name="action" value="save" type="submit">Save</button>
+      <button class="ui button" name="action" value="add_free_text" type="submit">Add Free Text</button>
+      <button class="ui button" name="action" value="reset" type="submit">Reset Default</button>
+    </div>
+  </div>
+
+  <table class="ui celled table">
+    <thead>
+      <tr>
+        <th>Field</th>
+        <th>Print name</th>
+        <th>Show</th>
+        <th>Font size</th>
+        <th>Order</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in rows %}
+        <tr>
+          <td>
+            {{ row.field_label }}
+            <input type="hidden" name="row_id" value="{{ row.id }}">
+            <input type="hidden" name="key_{{ row.id }}" value="{{ row.key }}">
+          </td>
+          <td><input name="print_name_{{ row.id }}" value="{{ row.print_name }}"></td>
+          <td><input type="checkbox" name="show_{{ row.id }}" {% if row.show %}checked{% endif %}></td>
+          <td><input name="font_size_{{ row.id }}" type="number" min="8" max="120" value="{{ row.font_size }}"></td>
+          <td class="osls-actions">
+            <button class="ui button" name="action" value="move_up" type="submit" formaction="{% url 'label_config' %}" onclick="this.form.target_id.value='{{ row.id }}'">Up</button>
+            <button class="ui button" name="action" value="move_down" type="submit" onclick="this.form.target_id.value='{{ row.id }}'">Down</button>
+            {% if row.is_free_text %}
+              <button class="ui negative button" name="action" value="delete" type="submit" onclick="this.form.target_id.value='{{ row.id }}'">Delete</button>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <input type="hidden" name="target_id" value="">
+</form>
+{% endblock %}
